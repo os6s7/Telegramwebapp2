@@ -42,11 +42,12 @@ The application follows a modern full-stack architecture with clear separation b
 - **Security**: HTTP-only cookies, CSRF protection, secure session handling
 
 ### E-commerce Features
-- **Product Catalog**: Categories, search, filtering, and product management
+- **Product Catalog**: Telegram-themed gift categories (Sticker Packs, Premium Features, Digital Collectibles, Gift Cards, Custom Themes, Telegram Stars)
 - **Shopping Cart**: Persistent cart with real-time updates
 - **Order Management**: Complete order lifecycle from creation to fulfillment
 - **Seller Dashboard**: Product listing, inventory management, order tracking
 - **Payment Integration**: Multiple payment methods (Bitcoin, Ethereum, Telegram Stars)
+- **Gift-focused Marketplace**: Specialized for Telegram gifts including stickers, premium subscriptions, digital collectibles, and virtual items
 
 ### UI/UX Design
 - **Theme**: Custom Telegram-inspired design system
