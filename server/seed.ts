@@ -33,14 +33,14 @@ async function seedDatabase() {
     const insertedUsers = await db.insert(users).values(userData).onConflictDoNothing().returning();
     console.log(`Created ${insertedUsers.length} demo users`);
 
-    // Create categories
+    // Create Telegram gift categories
     const categoryData = [
-      { name: "Electronics", slug: "electronics" },
-      { name: "Clothing", slug: "clothing" },
-      { name: "Home & Garden", slug: "home-garden" },
-      { name: "Sports", slug: "sports" },
-      { name: "Books", slug: "books" },
-      { name: "Toys", slug: "toys" },
+      { name: "Sticker Packs", slug: "sticker-packs" },
+      { name: "Premium Features", slug: "premium-features" },
+      { name: "Digital Collectibles", slug: "digital-collectibles" },
+      { name: "Gift Cards", slug: "gift-cards" },
+      { name: "Custom Themes", slug: "custom-themes" },
+      { name: "Telegram Stars", slug: "telegram-stars" },
     ];
 
     // Get existing categories or create new ones
@@ -51,66 +51,86 @@ async function seedDatabase() {
     }
     console.log(`${insertedCategories.length} categories available`);
 
-    // Create some sample products
+    // Create Telegram gift products
     const productData = [
       {
-        name: "Wireless Bluetooth Headphones",
-        description: "High-quality wireless headphones with noise cancellation and 30-hour battery life.",
-        price: "99.99",
-        imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop",
-        categoryId: insertedCategories[0].id, // Electronics
+        name: "Animated Sticker Pack - Cute Cats",
+        description: "Premium animated sticker pack featuring adorable cats with various emotions. Perfect for expressing yourself in chats!",
+        price: "2.99",
+        imageUrl: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400&h=300&fit=crop",
+        categoryId: insertedCategories[0].id, // Sticker Packs
         sellerId: "demo-seller-1",
-        stock: 25,
+        stock: 1000,
         isActive: true,
       },
       {
-        name: "Cotton T-Shirt",
-        description: "Comfortable 100% cotton t-shirt available in multiple colors and sizes.",
-        price: "19.99",
-        imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop",
-        categoryId: insertedCategories[1].id, // Clothing
+        name: "Telegram Premium (1 Month)",
+        description: "Unlock exclusive features: larger file uploads, custom reactions, advanced chat management, and premium stickers.",
+        price: "4.99",
+        imageUrl: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop",
+        categoryId: insertedCategories[1].id, // Premium Features
         sellerId: "demo-seller-2",
-        stock: 50,
+        stock: 500,
         isActive: true,
       },
       {
-        name: "Smart Phone Stand",
-        description: "Adjustable phone stand compatible with all smartphone sizes. Perfect for video calls and streaming.",
-        price: "15.99",
-        imageUrl: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=400&h=300&fit=crop",
-        categoryId: insertedCategories[0].id, // Electronics
-        sellerId: "demo-seller-1",
+        name: "Digital Art NFT Collection",
+        description: "Exclusive digital collectibles featuring original Telegram-themed artwork. Show off your unique style!",
+        price: "12.99",
+        imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop",
+        categoryId: insertedCategories[2].id, // Digital Collectibles
+        sellerId: "demo-seller-3",
         stock: 100,
         isActive: true,
       },
       {
-        name: "Ceramic Plant Pot",
-        description: "Beautiful handcrafted ceramic pot perfect for indoor plants. Includes drainage hole.",
-        price: "24.99",
-        imageUrl: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400&h=300&fit=crop",
-        categoryId: insertedCategories[2].id, // Home & Garden
-        sellerId: "demo-seller-3",
-        stock: 30,
-        isActive: true,
-      },
-      {
-        name: "Yoga Mat",
-        description: "Non-slip exercise mat perfect for yoga, pilates, and home workouts. Eco-friendly material.",
-        price: "34.99",
-        imageUrl: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop",
-        categoryId: insertedCategories[3].id, // Sports
-        sellerId: "demo-seller-2",
-        stock: 40,
-        isActive: true,
-      },
-      {
-        name: "Programming Book Set",
-        description: "Complete set of modern web development books covering React, Node.js, and TypeScript.",
-        price: "89.99",
-        imageUrl: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop",
-        categoryId: insertedCategories[4].id, // Books
+        name: "Telegram Stars Gift Card - 100 Stars",
+        description: "Send the gift of Telegram Stars! Perfect for friends to purchase premium content and features.",
+        price: "9.99",
+        imageUrl: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=300&fit=crop",
+        categoryId: insertedCategories[3].id, // Gift Cards
         sellerId: "demo-seller-1",
-        stock: 15,
+        stock: 250,
+        isActive: true,
+      },
+      {
+        name: "Dark Mode Theme Pack",
+        description: "Custom dark themes for Telegram with unique color schemes and beautiful gradients. Easy installation included.",
+        price: "1.99",
+        imageUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop",
+        categoryId: insertedCategories[4].id, // Custom Themes
+        sellerId: "demo-seller-2",
+        stock: 300,
+        isActive: true,
+      },
+      {
+        name: "500 Telegram Stars Bundle",
+        description: "Large bundle of Telegram Stars at a discounted price. Use for premium features, stickers, and gifts.",
+        price: "39.99",
+        imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
+        categoryId: insertedCategories[5].id, // Telegram Stars
+        sellerId: "demo-seller-3",
+        stock: 150,
+        isActive: true,
+      },
+      {
+        name: "Retro Gaming Sticker Pack",
+        description: "Nostalgic sticker pack with pixel art gaming characters and retro gaming references. Great for gaming communities!",
+        price: "3.99",
+        imageUrl: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=400&h=300&fit=crop",
+        categoryId: insertedCategories[0].id, // Sticker Packs
+        sellerId: "demo-seller-1",
+        stock: 400,
+        isActive: true,
+      },
+      {
+        name: "Exclusive Username Badge",
+        description: "Special collectible badge that displays next to your username. Limited edition design with holographic effects.",
+        price: "19.99",
+        imageUrl: "https://images.unsplash.com/photo-1635322966219-b75ed372eb01?w=400&h=300&fit=crop",
+        categoryId: insertedCategories[2].id, // Digital Collectibles
+        sellerId: "demo-seller-2",
+        stock: 50,
         isActive: true,
       },
     ];
