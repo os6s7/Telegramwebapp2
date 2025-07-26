@@ -31,8 +31,8 @@ export interface IStorage {
   createCategory(category: InsertCategory): Promise<Category>;
   
   // Product operations
-  getProducts(categoryId?: string, searchQuery?: string): Promise<(Product & { seller: Pick<User, 'id' | 'firstName' | 'lastName'> })[]>;
-  getProduct(id: string): Promise<(Product & { seller: Pick<User, 'id' | 'firstName' | 'lastName'> }) | undefined>;
+  getProducts(categoryId?: string, searchQuery?: string): Promise<(Product & { seller: Pick<User, 'id' | 'firstName' | 'lastName'> | null })[]>;
+  getProduct(id: string): Promise<(Product & { seller: Pick<User, 'id' | 'firstName' | 'lastName'> | null }) | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
   updateProduct(id: string, product: Partial<InsertProduct>): Promise<Product | undefined>;
   deleteProduct(id: string): Promise<boolean>;
@@ -85,7 +85,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Product operations
-  async getProducts(categoryId?: string, searchQuery?: string): Promise<(Product & { seller: Pick<User, 'id' | 'firstName' | 'lastName'> })[]> {
+  async getProducts(categoryId?: string, searchQuery?: string): Promise<(Product & { seller: Pick<User, 'id' | 'firstName' | 'lastName'> | null })[]> {
     let query = db
       .select({
         id: products.id,
@@ -111,19 +111,20 @@ export class DatabaseStorage implements IStorage {
       .leftJoin(users, eq(products.sellerId, users.id))
       .where(eq(products.isActive, true));
 
+    let conditions = [eq(products.isActive, true)];
+    
     if (categoryId) {
-      query = query.where(and(eq(products.isActive, true), eq(products.categoryId, categoryId)));
+      conditions.push(eq(products.categoryId, categoryId));
     }
 
     if (searchQuery) {
       const searchPattern = `%${searchQuery}%`;
-      query = query.where(
-        and(
-          eq(products.isActive, true),
-          sql`${products.name} ILIKE ${searchPattern} OR ${products.description} ILIKE ${searchPattern}`
-        )
+      conditions.push(
+        sql`${products.name} ILIKE ${searchPattern} OR ${products.description} ILIKE ${searchPattern}`
       );
     }
+
+    query = query.where(and(...conditions));
 
     return await query.orderBy(desc(products.createdAt));
   }
@@ -176,7 +177,7 @@ export class DatabaseStorage implements IStorage {
       .update(products)
       .set({ isActive: false, updatedAt: new Date() })
       .where(eq(products.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   async getProductsBySeller(sellerId: string): Promise<Product[]> {
@@ -241,12 +242,12 @@ export class DatabaseStorage implements IStorage {
 
   async removeFromCart(id: string): Promise<boolean> {
     const result = await db.delete(cartItems).where(eq(cartItems.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   async clearCart(userId: string): Promise<boolean> {
     const result = await db.delete(cartItems).where(eq(cartItems.userId, userId));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   // Order operations
