@@ -6,26 +6,32 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      "@": path.resolve(__dirname, "client/src"),
+      "@shared": path.resolve(__dirname, "shared"),
+      "@assets": path.resolve(__dirname, "attached_assets"),
+      // أضف هذا الـ alias لحل مشكلة telegram-web-app
+      "telegram-web-app": "@twa-dev/sdk"
     },
   },
   define: {
     "process.env.TELEGRAM_BOT_TOKEN": JSON.stringify(process.env.TELEGRAM_BOT_TOKEN),
     "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
   },
-  root: path.resolve(import.meta.dirname, "client"),
+  root: path.resolve(__dirname, "client"),
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
     rollupOptions: {
       output: {
         manualChunks: {
-          telegram: ["telegram-web-app"],
+          // عدّل هذا الجزء لاستخدام الحزمة الرسمية
+          telegram: ["@twa-dev/sdk"],
         },
       },
     },
+  },
+  optimizeDeps: {
+    include: ["@twa-dev/sdk"]
   },
   server: {
     fs: {
