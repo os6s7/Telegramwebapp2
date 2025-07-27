@@ -10,12 +10,7 @@ export default defineConfig({
     react({
       jsxRuntime: 'automatic',
       babel: {
-        plugins: [
-          ['babel-plugin-import', {
-            libraryName: '@twa-dev/sdk',
-            camel2DashComponentName: false
-          }]
-        ]
+        plugins: []
       }
     })
   ],
@@ -26,32 +21,26 @@ export default defineConfig({
       '@shared': path.resolve(__dirname, './client/src/shared'),
       'react': path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-      '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js'),
-      '~styles': path.resolve(__dirname, './client/src/styles') // مسار جديد للأنماط
+      '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js')
     },
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.css', '.scss']
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']
   },
 
   build: {
     outDir: path.resolve(__dirname, 'dist'),
     emptyOutDir: true,
     sourcemap: true,
-    cssTarget: 'es2020',
-    assetsInlineLimit: 0, // تغيير من 4096 إلى 0 لإجبار فصل ملفات CSS
-    minify: 'terser',
+    cssCodeSplit: false, // أهم تعديل - يمنع تقسيم ملفات CSS
+    assetsInlineLimit: 0, // يعطّل تضمين الموارد كـ base64
 
     rollupOptions: {
       input: path.resolve(__dirname, 'client/index.html'),
       external: ['@twa-dev/sdk'],
-
       output: {
         manualChunks: {
-          react: ['react', 'react-dom'],
-          styles: ['~styles/main.css'] // فصل ملفات الأنماط
+          react: ['react', 'react-dom']
         },
-        assetFileNames: 'assets/[name].[hash].[ext]', // تغيير لنمط التسمية
-        chunkFileNames: 'assets/[name].[hash].js',
-        entryFileNames: 'assets/[name].[hash].js'
+        assetFileNames: 'assets/[name].[ext]' // تنسيق أبسط لأسماء الملفات
       }
     }
   },
@@ -60,40 +49,16 @@ export default defineConfig({
     port: 3000,
     strictPort: true,
     hmr: {
-      port: 3000,
-      overlay: false // تعطيل overlay لتجنب المشاكل البصرية
-    },
-    fs: {
-      strict: false,
-      allow: ['..', './client/src/styles'] // السماح بقراءة ملفات الأنماط
-    },
-    middlewareMode: true
+      overlay: false // يعطّل overlay HMR لتجنب التشويش
+    }
   },
 
   css: {
     modules: {
-      localsConvention: 'camelCase',
-      generateScopedName: '[local]___[hash:base64:5]'
+      localsConvention: 'camelCase'
     },
-    postcss: {
-      plugins: [
-        require('postcss-import')(),
-        require('postcss-preset-env')({
-          stage: 3,
-          features: {
-            'nesting-rules': true
-          }
-        }),
-        require('tailwindcss')('./tailwind.config.js'),
-        require('autoprefixer')()
-      ]
-    },
-    devSourcemap: true,
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "~styles/variables.scss";`
-      }
-    }
+    postcss: path.resolve(__dirname, './postcss.config.js'),
+    devSourcemap: true // تمكين sourcemaps للـ CSS
   },
 
   optimizeDeps: {
@@ -101,25 +66,7 @@ export default defineConfig({
       'react',
       'react-dom',
       'react-dom/client',
-      '@twa-dev/sdk',
-      '~styles/main.css' // تضمين ملف الأنماط الرئيسي
-    ],
-    exclude: ['js-big-decimal'],
-    esbuildOptions: {
-      target: 'es2020',
-      supported: {
-        'top-level-await': true
-      },
-      loader: {
-        '.css': 'css',
-        '.scss': 'css'
-      }
-    }
-  },
-
-  esbuild: {
-    target: 'es2020',
-    legalComments: 'none',
-    css: true // تمكين معالجة CSS من خلال esbuild
+      '@twa-dev/sdk'
+    ]
   }
 });
