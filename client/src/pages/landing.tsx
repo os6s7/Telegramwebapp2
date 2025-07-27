@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Store, ShoppingCart, Star, Shield } from "lucide-react";
-import { useNavigate } from "wouter";
+import { usLocation } from "wouter";
 import { WebApp } from '@twa-dev/sdk';
 import { useEffect } from 'react';
 
 export default function Landing() {
-  const navigate = useNavigate();
+  const navigate = usLocatin();
 
   // تهيئة WebApp عند تحميل المكون
   useEffect(() => {
