@@ -30,6 +30,8 @@ export default defineConfig({
     outDir: path.resolve(__dirname, 'dist'),
     emptyOutDir: true,
     sourcemap: true,
+    cssTarget: 'es2020', // أضف هذا السطر
+    assetsInlineLimit: 4096, // أضف هذا السطر
 
     rollupOptions: {
       input: path.resolve(__dirname, 'client/index.html'),
@@ -42,7 +44,8 @@ export default defineConfig({
         globals: {
           'react': 'React',
           'react-dom': 'ReactDOM'
-        }
+        },
+        assetFileNames: 'assets/[name].[ext]' // أضف هذا السطر
       },
 
       onwarn(warning, warn) {
@@ -57,13 +60,17 @@ export default defineConfig({
     strictPort: true,
     hmr: {
       overlay: true
+    },
+    fs: { // أضف هذا القسم الجديد
+      strict: false,
+      allow: ['..']
     }
   },
 
   preview: {
-    host: '0.0.0.0', // مهم جداً لريندر
+    host: '0.0.0.0',
     port: 3000,
-    allowedHosts: ['telegramwebapp2.onrender.com'] // اسم الدومين الخاص بك على Render
+    allowedHosts: ['telegramwebapp2.onrender.com']
   },
 
   optimizeDeps: {
@@ -75,18 +82,24 @@ export default defineConfig({
     ],
     exclude: ['js-big-decimal'],
     esbuildOptions: {
-      target: 'es2020'
+      target: 'es2020',
+      supported: { // أضف هذا السطر
+        'top-level-await': true
+      }
     }
   },
 
   esbuild: {
-    target: 'es2020'
+    target: 'es2020',
+    legalComments: 'none' // أضف هذا السطر
   },
 
   css: {
     modules: {
-      localsConvention: 'camelCase'
+      localsConvention: 'camelCase',
+      generateScopedName: '[name]__[local]___[hash:base64:5]' // أضف هذا السطر
     },
-    postcss: path.resolve(__dirname, './postcss.config.js')
+    postcss: path.resolve(__dirname, './postcss.config.js'),
+    devSourcemap: true // أضف هذا السطر
   }
 });
