@@ -2,19 +2,23 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Store, ShoppingCart, Star, Shield } from "lucide-react";
 import { useNavigate } from "wouter";
+import { WebApp } from '@twa-dev/sdk';
 
 export default function Landing() {
   const navigate = useNavigate();
 
   const handleStartShopping = () => {
-    if (typeof window.Telegram?.WebApp?.initDataUnsafe?.user !== 'undefined') {
-      // مستخدم Telegram مسجل بالفعل
+    if (WebApp.initDataUnsafe?.user) {
+      // User is already authenticated via Telegram
       navigate("/home");
     } else {
-      // افتح نافذة Telegram للدخول
-      Telegram.WebApp.showAlert("Please sign in through Telegram", () => {
-        Telegram.WebApp.openTelegramLink("https://t.me/YourBotUsername");
-      });
+      // Request user to open in Telegram app
+      WebApp.showAlert(
+        "يجب التسجيل عبر تطبيق Telegram",
+        () => {
+          WebApp.openTelegramLink("https://t.me/YourBotUsername");
+        }
+      );
     }
   };
 
@@ -28,7 +32,7 @@ export default function Landing() {
           </div>
           <h1 className="text-4xl font-bold mb-4">TeleMarket</h1>
           <p className="text-xl text-blue-100 mb-8">
-            The ultimate marketplace for physical goods in Telegram
+            السوق الشامل للسلع المادية على Telegram
           </p>
         </div>
 
@@ -37,9 +41,9 @@ export default function Landing() {
           <Card className="bg-white/10 border-white/20 text-white">
             <CardContent className="p-6">
               <ShoppingCart className="w-8 h-8 mb-4 text-tg-warning" />
-              <h3 className="text-lg font-semibold mb-2">Easy Shopping</h3>
+              <h3 className="text-lg font-semibold mb-2">تسوق سهل</h3>
               <p className="text-blue-100">
-                Browse and buy products directly within Telegram with a seamless shopping experience.
+                تصفح واشتري المنتجات مباشرة على Telegram بتجربة سلسة
               </p>
             </CardContent>
           </Card>
@@ -47,9 +51,9 @@ export default function Landing() {
           <Card className="bg-white/10 border-white/20 text-white">
             <CardContent className="p-6">
               <Star className="w-8 h-8 mb-4 text-tg-warning" />
-              <h3 className="text-lg font-semibold mb-2">Multiple Payment Options</h3>
+              <h3 className="text-lg font-semibold mb-2">دفع متعدد الخيارات</h3>
               <p className="text-blue-100">
-                Pay with Bitcoin, Ethereum, or Telegram Stars for maximum convenience.
+                ادفع باستخدام Bitcoin أو Ethereum أو عملات Telegram Stars
               </p>
             </CardContent>
           </Card>
@@ -57,9 +61,9 @@ export default function Landing() {
           <Card className="bg-white/10 border-white/20 text-white">
             <CardContent className="p-6">
               <Store className="w-8 h-8 mb-4 text-tg-success" />
-              <h3 className="text-lg font-semibold mb-2">Sell Your Products</h3>
+              <h3 className="text-lg font-semibold mb-2">بيع منتجاتك</h3>
               <p className="text-blue-100">
-                Create listings and sell your products to millions of Telegram users.
+                أنشر منتجاتك وبيعها لملايين مستخدمي Telegram
               </p>
             </CardContent>
           </Card>
@@ -67,9 +71,9 @@ export default function Landing() {
           <Card className="bg-white/10 border-white/20 text-white">
             <CardContent className="p-6">
               <Shield className="w-8 h-8 mb-4 text-tg-success" />
-              <h3 className="text-lg font-semibold mb-2">Secure Transactions</h3>
+              <h3 className="text-lg font-semibold mb-2">معاملات آمنة</h3>
               <p className="text-blue-100">
-                All payments are secured with Telegram's encryption and blockchain technology.
+                جميع العمليات مؤمنة بتقنية التشفير من Telegram وتقنية البلوكشين
               </p>
             </CardContent>
           </Card>
@@ -82,10 +86,10 @@ export default function Landing() {
             size="lg"
             className="bg-white text-tg-blue hover:bg-gray-100 font-semibold px-8 py-3 text-lg"
           >
-            Start Shopping
+            ابدأ التسوق
           </Button>
           <p className="text-sm text-blue-100 mt-4">
-            Sign in with your Telegram account to get started
+            سجل الدخول بحساب Telegram لتبدأ
           </p>
         </div>
       </div>
