@@ -1,13 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-import { visualizer } from "rollup-plugin-visualizer";
+// 🔻 هذا السطر إحذفه
+// import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
   plugins: [
     react(),
-    process.env.ANALYZE === "true" ? visualizer() : null,
-  ].filter(Boolean),
+    // 🔻 هذا السطر إحذفه
+    // process.env.ANALYZE === "true" ? visualizer() : null,
+  ],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
