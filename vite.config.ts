@@ -57,10 +57,13 @@ export default defineConfig({
     strictPort: true,
     hmr: {
       overlay: true
-    },
-    preview: {
-      allowedHosts: ['telegramwebapp2.onrender.com'] // 👈 حتى تتجنب رسالة Blocked request
     }
+  },
+
+  preview: {
+    host: '0.0.0.0', // مهم جداً لريندر
+    port: 3000,
+    allowedHosts: ['telegramwebapp2.onrender.com'] // اسم الدومين الخاص بك على Render
   },
 
   optimizeDeps: {
