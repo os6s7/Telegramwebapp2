@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import autoprefixer from 'autoprefixer'; // استيراد مباشر بدلاً من require
+import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
   root: path.resolve(__dirname, 'client'),
@@ -9,13 +9,17 @@ export default defineConfig({
 
   plugins: [
     react({
-      jsxRuntime: 'automatic'
+      jsxRuntime: 'automatic',
+      babel: {
+        plugins: []
+      }
     })
   ],
 
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'client/src'),
+      '@shared': path.resolve(__dirname, 'client/src/shared'), // تأكيد المسار الصحيح
       'react': path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
       '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js')
@@ -29,9 +33,13 @@ export default defineConfig({
     sourcemap: true,
     cssCodeSplit: false,
     assetsInlineLimit: 0,
-
+    
     rollupOptions: {
       input: path.resolve(__dirname, 'client/index.html'),
+      external: [
+        '@twa-dev/sdk',
+        '@shared/schema' // إضافة المسار الذي يسبب المشكلة
+      ],
       output: {
         assetFileNames: 'assets/[name].[ext]',
         entryFileNames: 'assets/[name].js'
@@ -39,38 +47,9 @@ export default defineConfig({
     }
   },
 
-  server: {
-    port: 3000,
-    strictPort: true,
-    hmr: {
-      protocol: 'ws',
-      overlay: false
-    },
-    fs: {
-      allow: ['..']
-    }
-  },
-
   css: {
-    modules: {
-      localsConvention: 'camelCase'
-    },
     postcss: {
-      plugins: [
-        autoprefixer() // استخدام الاستيراد المباشر هنا
-      ]
-    },
-    devSourcemap: true
-  },
-
-  optimizeDeps: {
-    include: [
-      'react',
-      'react-dom',
-      '@twa-dev/sdk'
-    ],
-    esbuildOptions: {
-      target: 'es2020'
+      plugins: [autoprefixer()]
     }
   }
 });
