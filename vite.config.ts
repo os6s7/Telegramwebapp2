@@ -4,12 +4,21 @@ import path from 'path'
 
 export default defineConfig({
   root: path.resolve(__dirname, './client'),
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxRuntime: 'automatic',
+      babel: {
+        plugins: ['babel-plugin-macros']
+      }
+    })
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './client/src'),
       '@shared': path.resolve(__dirname, './client/src/shared'),
-      '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js')
+      '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js'),
+      'react': path.resolve(__dirname, './node_modules/react'),
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom')
     }
   },
   build: {
@@ -17,11 +26,25 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: path.resolve(__dirname, 'client/index.html'),
-      external: ['@twa-dev/sdk']
+      external: ['@twa-dev/sdk'],
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'],
+          vendor: ['@twa-dev/sdk']
+        }
+      }
     }
   },
   server: {
     port: 3000,
     strictPort: true
+  },
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      '@twa-dev/sdk'
+    ],
+    exclude: ['js-big-decimal']
   }
 })
