@@ -9,10 +9,7 @@ export default defineConfig({
   plugins: [
     react({
       jsxRuntime: 'automatic',
-      babel: {
-        plugins: [] // تضيف بلجنات إذا تحتاج
-      }
-    })
+    }),
   ],
 
   resolve: {
@@ -21,9 +18,9 @@ export default defineConfig({
       '@shared': path.resolve(__dirname, './client/src/shared'),
       'react': path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-      '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js')
+      '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js'),
     },
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
 
   build: {
@@ -37,52 +34,51 @@ export default defineConfig({
 
       output: {
         manualChunks: {
-          react: ['react', 'react-dom']
-          // ما تخلّي '@twa-dev/sdk' هنا لأنها مع external
+          react: ['react', 'react-dom'],
+          vendor: ['@twa-dev/sdk'],
         },
         globals: {
-          'react': 'React',
-          'react-dom': 'ReactDOM'
-        }
+          react: 'React',
+          'react-dom': 'ReactDOM',
+        },
       },
 
       onwarn(warning, warn) {
         if (warning.code === 'THIS_IS_UNDEFINED') return;
         warn(warning);
-      }
-    }
+      },
+    },
   },
 
   server: {
-    host: '0.0.0.0',      // هنا المفتاح! عشان يستمع من برّه
     port: 3000,
     strictPort: true,
     hmr: {
-      overlay: true
-    }
+      overlay: true,
+    },
   },
 
   optimizeDeps: {
-    include: [
-      'react',
-      'react-dom',
-      'react-dom/client',
-      '@twa-dev/sdk'
-    ],
+    include: ['react', 'react-dom', 'react-dom/client', '@twa-dev/sdk'],
     exclude: ['js-big-decimal'],
     esbuildOptions: {
-      target: 'es2020'
-    }
+      target: 'es2020',
+    },
   },
 
   esbuild: {
-    target: 'es2020'
+    target: 'es2020',
   },
 
   css: {
     modules: {
-      localsConvention: 'camelCase'
+      localsConvention: 'camelCase',
     },
-    postcss: path.resolve(__dirname, './postcss.config.js')
-  }
+    postcss: path.resolve(__dirname, './postcss.config.js'),
+  },
+
+  // هنا الحل السحري:
+  preview: {
+    allowedHosts: ['telegramwebapp2.onrender.com'],
+  },
 });
