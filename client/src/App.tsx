@@ -11,6 +11,7 @@ import ProductDetail from "@/pages/product-detail";
 import SellerDashboard from "@/pages/seller-dashboard";
 import Orders from "@/pages/orders";
 import Profile from "@/pages/profile";
+import { useEffect } from "react";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -34,10 +35,30 @@ function Router() {
 }
 
 function App() {
+  // تطبيق لون الخلفية الديناميكي
+  useEffect(() => {
+    const applyTheme = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      document.body.className = isDark ? 'bg-tg-bg-dark' : 'bg-tg-bg';
+    };
+
+    // تطبيق عند التحميل
+    applyTheme();
+
+    // مراقبة تغييرات السمة
+    const observer = new MutationObserver(applyTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="font-inter bg-tg-bg text-tg-text max-w-md mx-auto relative overflow-x-hidden min-h-screen">
+        <div className="font-inter text-tg-text max-w-md mx-auto relative overflow-x-hidden min-h-screen transition-colors duration-200">
           <Toaster />
           <Router />
         </div>
