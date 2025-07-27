@@ -3,44 +3,45 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 export default defineConfig({
-  root: path.resolve(__dirname, './client'),
-  publicDir: path.resolve(__dirname, './client/public'),
+  root: path.resolve(__dirname, 'client'), // التأكيد على استخدام مجلد client كجذر
+  publicDir: path.resolve(__dirname, 'client/public'), // مسار الملفات العامة
 
   plugins: [
     react({
       jsxRuntime: 'automatic',
       babel: {
-        plugins: []
+        plugins: [
+          ['babel-plugin-import', {
+            libraryName: '@twa-dev/sdk',
+            camel2DashComponentName: false
+          }]
+        ]
       }
     })
   ],
 
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './client/src'),
-      '@shared': path.resolve(__dirname, './client/src/shared'),
+      '@': path.resolve(__dirname, 'client/src'), // تحديث المسارات النسبية
       'react': path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
       '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js')
     },
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']
+    extensions: ['.js', '.ts', '.jsx', '.tsx', '.json']
   },
 
   build: {
     outDir: path.resolve(__dirname, 'dist'),
     emptyOutDir: true,
     sourcemap: true,
-    cssCodeSplit: false, // أهم تعديل - يمنع تقسيم ملفات CSS
-    assetsInlineLimit: 0, // يعطّل تضمين الموارد كـ base64
+    cssCodeSplit: false, // تعطيل تقسيم CSS
+    assetsInlineLimit: 0, // منع تضمين الموارد كـ base64
 
     rollupOptions: {
-      input: path.resolve(__dirname, 'client/index.html'),
-      external: ['@twa-dev/sdk'],
+      input: path.resolve(__dirname, 'client/index.html'), // المسار المطلق لملف HTML
       output: {
-        manualChunks: {
-          react: ['react', 'react-dom']
-        },
-        assetFileNames: 'assets/[name].[ext]' // تنسيق أبسط لأسماء الملفات
+        assetFileNames: 'assets/[name].[ext]', // تنسيق ملفات الأصول
+        entryFileNames: 'assets/[name].js' // تنسيق ملفات الدخول
       }
     }
   },
@@ -49,7 +50,11 @@ export default defineConfig({
     port: 3000,
     strictPort: true,
     hmr: {
-      overlay: false // يعطّل overlay HMR لتجنب التشويش
+      protocol: 'ws', // استخدام WebSocket لـ HMR
+      overlay: false // تعطيل overlay للرسائل
+    },
+    fs: {
+      allow: ['..'] // السماح بالوصول لمجلدات أعلى
     }
   },
 
@@ -57,16 +62,22 @@ export default defineConfig({
     modules: {
       localsConvention: 'camelCase'
     },
-    postcss: path.resolve(__dirname, './postcss.config.js'),
-    devSourcemap: true // تمكين sourcemaps للـ CSS
+    postcss: {
+      plugins: [
+        require('autoprefixer')()
+      ]
+    },
+    devSourcemap: true // تمكين source maps للتصحيح
   },
 
   optimizeDeps: {
     include: [
       'react',
       'react-dom',
-      'react-dom/client',
       '@twa-dev/sdk'
-    ]
+    ],
+    esbuildOptions: {
+      target: 'es2020'
+    }
   }
 });
