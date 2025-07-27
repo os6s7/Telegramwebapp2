@@ -6,9 +6,10 @@ export default defineConfig({
   root: path.resolve(__dirname, './client'),
   plugins: [
     react({
-      jsxRuntime: 'automatic',
+      // إزالة babel-plugin-macros إذا لم تكن بحاجة إليه
+      // أو الاحتفاظ به بعد تثبيت الحزمة
       babel: {
-        plugins: ['babel-plugin-macros']
+        plugins: [] // يمكنك إضافة plugins أخرى هنا إذا لزم الأمر
       }
     })
   ],
@@ -16,9 +17,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './client/src'),
       '@shared': path.resolve(__dirname, './client/src/shared'),
-      '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js'),
-      'react': path.resolve(__dirname, './node_modules/react'),
-      'react-dom': path.resolve(__dirname, './node_modules/react-dom')
+      '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js')
     }
   },
   build: {
@@ -26,25 +25,11 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: path.resolve(__dirname, 'client/index.html'),
-      external: ['@twa-dev/sdk'],
-      output: {
-        manualChunks: {
-          react: ['react', 'react-dom'],
-          vendor: ['@twa-dev/sdk']
-        }
-      }
+      external: ['@twa-dev/sdk']
     }
   },
   server: {
     port: 3000,
     strictPort: true
-  },
-  optimizeDeps: {
-    include: [
-      'react',
-      'react-dom',
-      '@twa-dev/sdk'
-    ],
-    exclude: ['js-big-decimal']
   }
 })
