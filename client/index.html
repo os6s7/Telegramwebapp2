@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- أضف هذا النمط المضمن -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- النمط المضمن كحل احتياطي -->
   <style>
     body, #root {
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      background: #f0f8ff !important; /* لون احتياطي */
+      background: #f0f8ff;
     }
   </style>
-  <link rel="stylesheet" href="/src/index.css"> <!-- تأكد من المسار -->
+  
+  <!-- تعديل مسار CSS ليكون نسبياً من مجلد src -->
+  <link rel="stylesheet" href="./src/index.css">
 </head>
 <body>
   <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
+  
+  <!-- تعديل مسار ملف الإدخال الرئيسي -->
+  <script type="module" src="./src/main.tsx"></script>
 </body>
 </html>
