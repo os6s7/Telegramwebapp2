@@ -1,42 +1,11 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl"> <!-- تعديل اللغة والاتجاه للدعم العربي -->
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-  <meta name="theme-color" content="#0088cc"> <!-- لون شريط العنوان في المتصفح -->
-  
-  <!-- تحميل خط Inter (اختياري) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  
-  <!-- Telegram WebApp SDK -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  
   <style>
-    /* منع الوميض الأبيض قبل تحميل React */
-    body {
-      background-color: #f5f5f5; /* لون مؤقت يشبه --tg-bg */
-      margin: 0;
-      transition: background-color 0.3s ease;
-    }
-    .dark body {
-      background-color: #18222d; /* لون مؤقت يشبه --tg-bg-dark */
-    }
-    
-    /* تحسين العرض أثناء التحميل */
-    #root {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    body { background: green; }
   </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-  
-  <!-- إزالة سكربت Replit إذا لم يكن ضرورياً للإنتاج -->
-  <!-- <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script> -->
+  <h1>Test</h1>
 </body>
 </html>
