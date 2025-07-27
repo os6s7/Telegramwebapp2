@@ -10,7 +10,7 @@ export default defineConfig({
     react({
       jsxRuntime: 'automatic',
       babel: {
-        plugins: [] // ممكن تضيف بلجنات هنا
+        plugins: [] // تضيف بلجنات إذا تحتاج
       }
     })
   ],
@@ -18,7 +18,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './client/src'),
-      '@shared': path.resolve(__dirname, './client/src/shared'), // ✅ لحل خطأ import
+      '@shared': path.resolve(__dirname, './client/src/shared'),
       'react': path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
       '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js')
@@ -38,7 +38,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           react: ['react', 'react-dom']
-          // شلنا vendor: ['@twa-dev/sdk']
+          // ما تخلّي '@twa-dev/sdk' هنا لأنها مع external
         },
         globals: {
           'react': 'React',
@@ -54,6 +54,7 @@ export default defineConfig({
   },
 
   server: {
+    host: '0.0.0.0',      // هنا المفتاح! عشان يستمع من برّه
     port: 3000,
     strictPort: true,
     hmr: {
