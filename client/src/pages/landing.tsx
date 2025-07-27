@@ -1,10 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Store, ShoppingCart, Star, Shield } from "lucide-react";
+import { useNavigate } from "wouter";
 
 export default function Landing() {
-  const handleLogin = () => {
-    window.location.href = "/api/login";
+  const navigate = useNavigate();
+
+  const handleStartShopping = () => {
+    if (typeof window.Telegram?.WebApp?.initDataUnsafe?.user !== 'undefined') {
+      // مستخدم Telegram مسجل بالفعل
+      navigate("/home");
+    } else {
+      // افتح نافذة Telegram للدخول
+      Telegram.WebApp.showAlert("Please sign in through Telegram", () => {
+        Telegram.WebApp.openTelegramLink("https://t.me/YourBotUsername");
+      });
+    }
   };
 
   return (
@@ -58,7 +69,7 @@ export default function Landing() {
               <Shield className="w-8 h-8 mb-4 text-tg-success" />
               <h3 className="text-lg font-semibold mb-2">Secure Transactions</h3>
               <p className="text-blue-100">
-                All payments are secured with advanced encryption and blockchain technology.
+                All payments are secured with Telegram's encryption and blockchain technology.
               </p>
             </CardContent>
           </Card>
@@ -67,14 +78,14 @@ export default function Landing() {
         {/* CTA */}
         <div className="text-center">
           <Button 
-            onClick={handleLogin}
+            onClick={handleStartShopping}
             size="lg"
             className="bg-white text-tg-blue hover:bg-gray-100 font-semibold px-8 py-3 text-lg"
           >
             Start Shopping
           </Button>
           <p className="text-sm text-blue-100 mt-4">
-            Sign in with your Replit account to get started
+            Sign in with your Telegram account to get started
           </p>
         </div>
       </div>
