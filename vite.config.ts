@@ -5,12 +5,12 @@ import path from 'path';
 export default defineConfig({
   root: path.resolve(__dirname, './client'),
   publicDir: path.resolve(__dirname, './client/public'),
-  
+
   plugins: [
     react({
       jsxRuntime: 'automatic',
       babel: {
-        plugins: [] // يمكن إضافة plugins هنا إذا لزم الأمر
+        plugins: [] // ممكن تضيف بلجنات هنا
       }
     })
   ],
@@ -18,7 +18,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './client/src'),
-      '@shared': path.resolve(__dirname, './client/src/shared'),
+      '@shared': path.resolve(__dirname, './client/src/shared'), // ✅ لحل خطأ import
       'react': path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
       '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js')
@@ -29,12 +29,12 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, 'dist'),
     emptyOutDir: true,
-    sourcemap: true, // مفيد لتصحيح الأخطاء
-    
+    sourcemap: true,
+
     rollupOptions: {
       input: path.resolve(__dirname, 'client/index.html'),
       external: ['@twa-dev/sdk'],
-      
+
       output: {
         manualChunks: {
           react: ['react', 'react-dom'],
@@ -45,7 +45,7 @@ export default defineConfig({
           'react-dom': 'ReactDOM'
         }
       },
-      
+
       onwarn(warning, warn) {
         if (warning.code === 'THIS_IS_UNDEFINED') return;
         warn(warning);
