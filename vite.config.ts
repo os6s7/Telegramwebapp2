@@ -1,28 +1,21 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import autoprefixer from 'autoprefixer'; // استيراد مباشر بدلاً من require
 
 export default defineConfig({
-  root: path.resolve(__dirname, 'client'), // التأكيد على استخدام مجلد client كجذر
-  publicDir: path.resolve(__dirname, 'client/public'), // مسار الملفات العامة
+  root: path.resolve(__dirname, 'client'),
+  publicDir: path.resolve(__dirname, 'client/public'),
 
   plugins: [
     react({
-      jsxRuntime: 'automatic',
-      babel: {
-        plugins: [
-          ['babel-plugin-import', {
-            libraryName: '@twa-dev/sdk',
-            camel2DashComponentName: false
-          }]
-        ]
-      }
+      jsxRuntime: 'automatic'
     })
   ],
 
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'client/src'), // تحديث المسارات النسبية
+      '@': path.resolve(__dirname, 'client/src'),
       'react': path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
       '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js')
@@ -34,14 +27,14 @@ export default defineConfig({
     outDir: path.resolve(__dirname, 'dist'),
     emptyOutDir: true,
     sourcemap: true,
-    cssCodeSplit: false, // تعطيل تقسيم CSS
-    assetsInlineLimit: 0, // منع تضمين الموارد كـ base64
+    cssCodeSplit: false,
+    assetsInlineLimit: 0,
 
     rollupOptions: {
-      input: path.resolve(__dirname, 'client/index.html'), // المسار المطلق لملف HTML
+      input: path.resolve(__dirname, 'client/index.html'),
       output: {
-        assetFileNames: 'assets/[name].[ext]', // تنسيق ملفات الأصول
-        entryFileNames: 'assets/[name].js' // تنسيق ملفات الدخول
+        assetFileNames: 'assets/[name].[ext]',
+        entryFileNames: 'assets/[name].js'
       }
     }
   },
@@ -50,11 +43,11 @@ export default defineConfig({
     port: 3000,
     strictPort: true,
     hmr: {
-      protocol: 'ws', // استخدام WebSocket لـ HMR
-      overlay: false // تعطيل overlay للرسائل
+      protocol: 'ws',
+      overlay: false
     },
     fs: {
-      allow: ['..'] // السماح بالوصول لمجلدات أعلى
+      allow: ['..']
     }
   },
 
@@ -64,10 +57,10 @@ export default defineConfig({
     },
     postcss: {
       plugins: [
-        require('autoprefixer')()
+        autoprefixer() // استخدام الاستيراد المباشر هنا
       ]
     },
-    devSourcemap: true // تمكين source maps للتصحيح
+    devSourcemap: true
   },
 
   optimizeDeps: {
