@@ -5,12 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تطبيقي</title>
   
-  <!-- الخيار 1: إذا كان الملف في client/src/index.css -->
-  <link rel="stylesheet" href="./src/index.css">
-
-  <!-- الخيار 2: إذا كان الملف في public/css/style.css -->
-  <!-- <link rel="stylesheet" href="/css/style.css"> -->
-
-  <!-- إضافة خطوط عربية (اختياري) -->
+  <!-- الطريقة المضمونة لاستيراد CSS -->
+  <link rel="stylesheet" href="/src/index.css">
+  
+  <!-- احتياطي إذا لم تعمل الطريقة الأولى -->
+  <style>
+    body {
+      background-color: #f0f8ff;
+    }
+  </style>
+  
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 </head>
+<body>
+  <div class="container">
+    <h1>مرحبًا بالعالم!</h1>
+    <p>هذا اختبار لعرض الألوان والتصميم</p>
+  </div>
+</body>
+</html>
