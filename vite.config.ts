@@ -3,30 +3,24 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 export default defineConfig({
+  root: path.resolve(__dirname, './client'), // تأكد من صحة المسار
   plugins: [react()],
   resolve: {
     alias: {
-      // حل مشكلة المسارات المطلقة
       '@': path.resolve(__dirname, './client/src'),
-      // الحل الخاص لـ @twa-dev/sdk
-      '@twa-dev/sdk': path.resolve(__dirname, 'node_modules/@twa-dev/sdk/dist/index.js')
+      '@twa-dev/sdk': path.resolve(__dirname, './node_modules/@twa-dev/sdk/dist/index.js')
     }
   },
   build: {
+    outDir: path.resolve(__dirname, 'dist'),
+    emptyOutDir: true,
     rollupOptions: {
-      // الحل السحري لمنع الأخطاء
-      external: ['@twa-dev/sdk'],
-      output: {
-        globals: {
-          '@twa-dev/sdk': 'TelegramWebApp'
-        }
-      }
-    },
-    commonjsOptions: {
-      include: [/node_modules/, /@twa-dev\/sdk/]
+      input: path.resolve(__dirname, 'client/index.html'), // حدد مسار index.html صراحةً
+      external: ['@twa-dev/sdk']
     }
   },
-  optimizeDeps: {
-    include: ['@twa-dev/sdk']
+  server: {
+    port: 3000,
+    strictPort: true
   }
 })
