@@ -15,28 +15,35 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
 
-// Session storage table for Replit Auth
+// نظام الجلسات المعدل (بدون Replit)
 export const sessions = pgTable(
   "sessions",
   {
     sid: varchar("sid").primaryKey(),
     sess: jsonb("sess").notNull(),
     expire: timestamp("expire").notNull(),
+    telegramUserId: varchar("telegram_user_id").references(() => users.id)
   },
-  (table) => [index("IDX_session_expire").on(table.expire)],
+  (table) => [
+    index("IDX_session_expire").on(table.expire),
+    index("IDX_telegram_user_id").on(table.telegramUserId)
+  ],
 );
 
-// User storage table for Replit Auth
+// جدول المستخدمين المعدل لدعم Telegram
 export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  email: varchar("email").unique(),
+  id: varchar("id").primaryKey(), // لن نستخدم UUID بل Telegram user_id
+  username: varchar("username"),
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
-  profileImageUrl: varchar("profile_image_url"),
+  photoUrl: varchar("photo_url"),
+  isPremium: boolean("is_premium"),
+  languageCode: varchar("language_code", { length: 10 }),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// باقي الجداول تبقى كما هي (بدون تغيير)
 export const categories = pgTable("categories", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: varchar("name", { length: 100 }).notNull(),
@@ -88,13 +95,22 @@ export const orderItems = pgTable("order_items", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-// Relations
+// العلاقات المعدلة لدعم Telegram
 export const usersRelations = relations(users, ({ many }) => ({
   products: many(products),
   cartItems: many(cartItems),
   orders: many(orders),
+  sessions: many(sessions),
 }));
 
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.telegramUserId],
+    references: [users.id],
+  }),
+}));
+
+// باقي العلاقات تبقى كما هي
 export const categoriesRelations = relations(categories, ({ many }) => ({
   products: many(products),
 }));
@@ -142,13 +158,15 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
   }),
 }));
 
-// Insert schemas
-export const insertUserSchema = createInsertSchema(users).omit({
-  id: true,
+// أنظمة الإدراج المعدلة
+export const insertUserSchema = createInsertSchema(users, {
+  id: z.string().min(1, "Telegram user ID is required"),
+}).omit({
   createdAt: true,
   updatedAt: true,
 });
 
+// باقي أنظمة الإدراج تبقى كما هي
 export const insertCategorySchema = createInsertSchema(categories).omit({
   id: true,
   createdAt: true,
@@ -178,9 +196,23 @@ export const insertOrderItemSchema = createInsertSchema(orderItems).omit({
   createdAt: true,
 });
 
-// Types
+// الأنواع المعدلة
+export type TelegramUser = {
+  id: string;
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  photo_url?: string;
+  is_premium?: boolean;
+  language_code?: string;
+};
+
+export type User = typeof users.$inferSelect & {
+  telegramData?: TelegramUser;
+};
+
+// باقي الأنواع تبقى كما هي
 export type UpsertUser = typeof users.$inferInsert;
-export type User = typeof users.$inferSelect;
 export type Category = typeof categories.$inferSelect;
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
 export type Product = typeof products.$inferSelect;
