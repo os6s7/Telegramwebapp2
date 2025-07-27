@@ -3,40 +3,42 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 100%);
+  /* ألوان مخصصة - الوضع الفاتح (Light Mode) */
+  --background: hsl(0, 0%, 98%); /* أبيض مائل للرمادي (بديل عن #FFFFFF) */
   --foreground: hsl(210, 7%, 15%);
-  --muted: hsl(210, 40%, 96%);
+  --muted: hsl(210, 20%, 97%); /* أفتح من الأصل لتقليل التباين */
   --muted-foreground: hsl(210, 6%, 55%);
-  --popover: hsl(0, 0%, 100%);
+  --popover: hsl(0, 0%, 96%); /* أبيض ناعم */
   --popover-foreground: hsl(210, 7%, 15%);
-  --card: hsl(0, 0%, 100%);
+  --card: hsl(0, 0%, 97%); /* بطاقات بلون كريمي */
   --card-foreground: hsl(210, 7%, 15%);
-  --border: hsl(214, 32%, 91%);
-  --input: hsl(214, 32%, 91%);
-  --primary: hsl(201, 100%, 40%);
+  --border: hsl(214, 20%, 85%); /* حدود أقل حدة */
+  --input: hsl(214, 20%, 90%); /* خلفية حقول الإدخال */
+  --primary: hsl(201, 100%, 40%); /* أزرق تيليجرام الأساسي */
   --primary-foreground: hsl(210, 40%, 98%);
-  --secondary: hsl(210, 40%, 96%);
+  --secondary: hsl(210, 20%, 95%); /* أفتح للتباين */
   --secondary-foreground: hsl(222, 84%, 5%);
-  --accent: hsl(210, 40%, 96%);
+  --accent: hsl(210, 20%, 95%);
   --accent-foreground: hsl(222, 84%, 5%);
   --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(210, 40%, 98%);
   --ring: hsl(210, 7%, 15%);
   --radius: 0.5rem;
-  
-  /* Telegram-specific colors */
+
+  /* ألوان تيليجرام المخصصة - الوضع الفاتح */
   --tg-blue: hsl(201, 100%, 40%);
   --tg-light: hsl(205, 100%, 62%);
   --tg-success: hsl(103, 66%, 44%);
   --tg-warning: hsl(44, 98%, 50%);
   --tg-error: hsl(5, 100%, 65%);
-  --tg-bg: hsl(210, 20%, 96%);
-  --tg-card: hsl(0, 0%, 100%);
-  --tg-text: hsl(210, 7%, 15%);
+  --tg-bg: hsl(210, 20%, 98%); /* خلفية فاتحة جدًا (تشبه تيليجرام) */
+  --tg-card: hsl(0, 0%, 97%); /* أبيض كريمي */
+  --tg-text: hsl(210, 7%, 20%); /* نص أغمق قليلاً */
   --tg-text-light: hsl(210, 6%, 55%);
 }
 
 .dark {
+  /* ألوان الوضع المظلم (تبقى كما هي) */
   --background: hsl(222, 84%, 5%);
   --foreground: hsl(210, 40%, 98%);
   --muted: hsl(217, 32%, 17%);
@@ -56,8 +58,8 @@
   --destructive: hsl(0, 62%, 30%);
   --destructive-foreground: hsl(210, 40%, 98%);
   --ring: hsl(212, 72%, 59%);
-  
-  /* Telegram-specific colors - dark mode */
+
+  /* ألوان تيليجرام - الوضع المظلم */
   --tg-bg: hsl(220, 13%, 18%);
   --tg-card: hsl(222, 84%, 5%);
   --tg-text: hsl(210, 40%, 98%);
@@ -70,66 +72,46 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, sans-serif;
+    /* تأثير تخفيف السطوع (اختياري) */
+    background-color: var(--tg-bg);
   }
 }
 
 @layer utilities {
+  /* إخفاء شريط التمرير */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-  
-  .bg-tg-blue {
-    background-color: var(--tg-blue);
-  }
-  
-  .bg-tg-light {
-    background-color: var(--tg-light);
-  }
-  
-  .bg-tg-success {
-    background-color: var(--tg-success);
-  }
-  
-  .bg-tg-warning {
-    background-color: var(--tg-warning);
-  }
-  
-  .bg-tg-error {
-    background-color: var(--tg-error);
-  }
-  
-  .bg-tg-bg {
-    background-color: var(--tg-bg);
-  }
-  
-  .bg-tg-card {
-    background-color: var(--tg-card);
-  }
-  
-  .text-tg-blue {
-    color: var(--tg-blue);
-  }
-  
-  .text-tg-text {
-    color: var(--tg-text);
-  }
-  
-  .text-tg-text-light {
-    color: var(--tg-text-light);
-  }
-  
+
+  /* فئات تيليجرام المخصصة */
+  .bg-tg-blue { background-color: var(--tg-blue); }
+  .bg-tg-light { background-color: var(--tg-light); }
+  .bg-tg-success { background-color: var(--tg-success); }
+  .bg-tg-warning { background-color: var(--tg-warning); }
+  .bg-tg-error { background-color: var(--tg-error); }
+  .bg-tg-bg { background-color: var(--tg-bg); }
+  .bg-tg-card { background-color: var(--tg-card); }
+  .text-tg-blue { color: var(--tg-blue); }
+  .text-tg-text { color: var(--tg-text); }
+  .text-tg-text-light { color: var(--tg-text-light); }
+
+  /* تأثيرات الظل */
   .shadow-tg {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* ظل أخف */
   }
-  
   .shadow-tg-lg {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  /* طبقة شفافة لتخفيف السطوع (اختياري) */
+  .bg-tg-overlay {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px);
   }
 }
