@@ -1,26 +1,19 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تطبيقي</title>
-  
-  <!-- الطريقة المضمونة لاستيراد CSS -->
-  <link rel="stylesheet" href="/src/index.css">
-  
-  <!-- احتياطي إذا لم تعمل الطريقة الأولى -->
+  <!-- أضف هذا النمط المضمن مباشرة -->
   <style>
     body {
-      background-color: #f0f8ff;
+      background-color: #f0f8ff !important; /* لون مؤقت للتأكد */
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     }
   </style>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <!-- احتفظ ببقية الروابط كما هي -->
+  <link rel="stylesheet" href="/src/index.css">
 </head>
 <body>
-  <div class="container">
-    <h1>مرحبًا بالعالم!</h1>
-    <p>هذا اختبار لعرض الألوان والتصميم</p>
-  </div>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>
