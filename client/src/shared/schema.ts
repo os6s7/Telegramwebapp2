@@ -15,16 +15,13 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
 
-// نظام الجلسات المعدل (بدون Replit)
-
-
-// باقي الجداول تبقى كما هي (بدون تغيير)
 export const categories = pgTable("categories", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: varchar("name", { length: 100 }).notNull(),
   slug: varchar("slug", { length: 100 }).notNull().unique(),
   createdAt: timestamp("created_at").defaultNow(),
-// 🟢 1. عرف users أولاً
+});
+
 export const users = pgTable("users", {
   id: varchar("id").primaryKey(),
   username: varchar("username"),
@@ -37,7 +34,6 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// 🟢 2. ثم sessions بعده
 export const sessions = pgTable(
   "sessions",
   {
@@ -49,7 +45,7 @@ export const sessions = pgTable(
   (table) => [
     index("IDX_session_expire").on(table.expire),
     index("IDX_telegram_user_id").on(table.telegramUserId)
-  ],
+  ]
 );
 
 export const products = pgTable("products", {
@@ -96,7 +92,6 @@ export const orderItems = pgTable("order_items", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-// العلاقات المعدلة لدعم Telegram
 export const usersRelations = relations(users, ({ many }) => ({
   products: many(products),
   cartItems: many(cartItems),
@@ -111,7 +106,6 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
   }),
 }));
 
-// باقي العلاقات تبقى كما هي
 export const categoriesRelations = relations(categories, ({ many }) => ({
   products: many(products),
 }));
@@ -159,7 +153,6 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
   }),
 }));
 
-// أنظمة الإدراج المعدلة
 export const insertUserSchema = createInsertSchema(users, {
   id: z.string().min(1, "Telegram user ID is required"),
 }).omit({
@@ -167,7 +160,6 @@ export const insertUserSchema = createInsertSchema(users, {
   updatedAt: true,
 });
 
-// باقي أنظمة الإدراج تبقى كما هي
 export const insertCategorySchema = createInsertSchema(categories).omit({
   id: true,
   createdAt: true,
@@ -197,7 +189,6 @@ export const insertOrderItemSchema = createInsertSchema(orderItems).omit({
   createdAt: true,
 });
 
-// الأنواع المعدلة
 export type TelegramUser = {
   id: string;
   username?: string;
@@ -212,7 +203,6 @@ export type User = typeof users.$inferSelect & {
   telegramData?: TelegramUser;
 };
 
-// باقي الأنواع تبقى كما هي
 export type UpsertUser = typeof users.$inferInsert;
 export type Category = typeof categories.$inferSelect;
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
