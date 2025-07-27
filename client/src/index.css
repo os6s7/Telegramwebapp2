@@ -4,19 +4,19 @@
 
 :root {
   /* ألوان مخصصة - الوضع الفاتح (Light Mode) */
-  --background: hsl(0, 0%, 98%); /* أبيض مائل للرمادي (بديل عن #FFFFFF) */
+  --background: hsl(0, 0%, 98%);
   --foreground: hsl(210, 7%, 15%);
-  --muted: hsl(210, 20%, 97%); /* أفتح من الأصل لتقليل التباين */
+  --muted: hsl(210, 20%, 97%);
   --muted-foreground: hsl(210, 6%, 55%);
-  --popover: hsl(0, 0%, 96%); /* أبيض ناعم */
+  --popover: hsl(0, 0%, 96%);
   --popover-foreground: hsl(210, 7%, 15%);
-  --card: hsl(0, 0%, 97%); /* بطاقات بلون كريمي */
+  --card: hsl(0, 0%, 97%);
   --card-foreground: hsl(210, 7%, 15%);
-  --border: hsl(214, 20%, 85%); /* حدود أقل حدة */
-  --input: hsl(214, 20%, 90%); /* خلفية حقول الإدخال */
-  --primary: hsl(201, 100%, 40%); /* أزرق تيليجرام الأساسي */
+  --border: hsl(214, 20%, 85%);
+  --input: hsl(214, 20%, 90%);
+  --primary: hsl(201, 100%, 40%);
   --primary-foreground: hsl(210, 40%, 98%);
-  --secondary: hsl(210, 20%, 95%); /* أفتح للتباين */
+  --secondary: hsl(210, 20%, 95%);
   --secondary-foreground: hsl(222, 84%, 5%);
   --accent: hsl(210, 20%, 95%);
   --accent-foreground: hsl(222, 84%, 5%);
@@ -25,20 +25,23 @@
   --ring: hsl(210, 7%, 15%);
   --radius: 0.5rem;
 
-  /* ألوان تيليجرام المخصصة - الوضع الفاتح */
+  /* ألوان تيليجرام المخصصة */
   --tg-blue: hsl(201, 100%, 40%);
   --tg-light: hsl(205, 100%, 62%);
   --tg-success: hsl(103, 66%, 44%);
   --tg-warning: hsl(44, 98%, 50%);
   --tg-error: hsl(5, 100%, 65%);
-  --tg-bg: hsl(210, 20%, 98%); /* خلفية فاتحة جدًا (تشبه تيليجرام) */
-  --tg-card: hsl(0, 0%, 97%); /* أبيض كريمي */
-  --tg-text: hsl(210, 7%, 20%); /* نص أغمق قليلاً */
+  --tg-bg: hsl(210, 20%, 98%);
+  --tg-bg-dark: hsl(220, 13%, 18%);
+  --tg-card: hsl(0, 0%, 97%);
+  --tg-card-dark: hsl(222, 84%, 5%);
+  --tg-text: hsl(210, 7%, 20%);
+  --tg-text-dark: hsl(210, 40%, 98%);
   --tg-text-light: hsl(210, 6%, 55%);
+  --tg-text-light-dark: hsl(215, 20%, 65%);
 }
 
 .dark {
-  /* ألوان الوضع المظلم (تبقى كما هي) */
   --background: hsl(222, 84%, 5%);
   --foreground: hsl(210, 40%, 98%);
   --muted: hsl(217, 32%, 17%);
@@ -58,24 +61,33 @@
   --destructive: hsl(0, 62%, 30%);
   --destructive-foreground: hsl(210, 40%, 98%);
   --ring: hsl(212, 72%, 59%);
-
-  /* ألوان تيليجرام - الوضع المظلم */
-  --tg-bg: hsl(220, 13%, 18%);
-  --tg-card: hsl(222, 84%, 5%);
-  --tg-text: hsl(210, 40%, 98%);
-  --tg-text-light: hsl(215, 20%, 65%);
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border theme-transition;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(214, 20%, 85%) transparent;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, sans-serif;
-    /* تأثير تخفيف السطوع (اختياري) */
-    background-color: var(--tg-bg);
+    transition: background-color 0.3s ease, color 0.2s ease;
+  }
+
+  /* تحسينات لسكرول بار */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-muted;
   }
 }
 
@@ -84,9 +96,9 @@
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+    &::-webkit-scrollbar {
+      @apply hidden;
+    }
   }
 
   /* فئات تيليجرام المخصصة */
@@ -96,22 +108,48 @@
   .bg-tg-warning { background-color: var(--tg-warning); }
   .bg-tg-error { background-color: var(--tg-error); }
   .bg-tg-bg { background-color: var(--tg-bg); }
+  .bg-tg-bg-dark { background-color: var(--tg-bg-dark); }
   .bg-tg-card { background-color: var(--tg-card); }
+  .bg-tg-card-dark { background-color: var(--tg-card-dark); }
   .text-tg-blue { color: var(--tg-blue); }
   .text-tg-text { color: var(--tg-text); }
+  .text-tg-text-dark { color: var(--tg-text-dark); }
   .text-tg-text-light { color: var(--tg-text-light); }
+  .text-tg-text-light-dark { color: var(--tg-text-light-dark); }
 
   /* تأثيرات الظل */
   .shadow-tg {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* ظل أخف */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   }
   .shadow-tg-lg {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  .dark .shadow-tg {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  }
+  .dark .shadow-tg-lg {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
-  /* طبقة شفافة لتخفيف السطوع (اختياري) */
+  /* طبقات شفافة */
   .bg-tg-overlay {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(4px);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .dark .bg-tg-overlay {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* انتقالات السمة */
+  .theme-transition {
+    transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease;
+  }
+
+  /* حالة عدم الانتقال */
+  .no-transition {
+    transition: none !important;
   }
 }
