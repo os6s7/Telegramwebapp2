@@ -2,35 +2,44 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
-// 1. دالة تهيئة تيليجرام الآمنة
+// دالة لتهيئة سمة تيليجرام
 const initTelegramTheme = () => {
-  if (typeof window === "undefined") return; // تجنب الأخطاء في SSR
-  
-  // انتظر حتى يصبح Telegram.WebApp جاهزًا (مهم لبعض الحالات)
-  const checkTelegram = () => {
-    if (window.Telegram?.WebApp?.initData) {
-      // تطبيق الوضع المظلم
-      document.documentElement.classList.toggle(
-        "dark",
-        window.Telegram.WebApp.colorScheme === "dark"
-      );
-      
-      // الاستجابة للتغييرات الديناميكية
-      window.Telegram.WebApp.onEvent("themeChanged", () => {
-        document.documentElement.classList.toggle(
-          "dark",
-          window.Telegram.WebApp.colorScheme === "dark"
-        );
-      });
-    } else {
-      setTimeout(checkTelegram, 100); // إعادة المحاولة بعد 100ms
-    }
+  if (typeof window === "undefined") return;
+
+  const setupTheme = () => {
+    const tg = window.Telegram?.WebApp;
+    if (!tg) return;
+
+    // تطبيق السمة الحالية
+    document.documentElement.classList.toggle("dark", tg.colorScheme === "dark");
+
+    // الاستجابة لتغييرات السمة
+    tg.onEvent("themeChanged", () => {
+      document.documentElement.classList.toggle("dark", tg.colorScheme === "dark");
+    });
   };
-  
-  checkTelegram();
+
+  // إذا كان WebApp جاهزاً
+  if (window.Telegram?.WebApp?.initData) {
+    setupTheme();
+  } else {
+    // الانتظار حتى يصبح جاهزاً (لحالات التحميل البطيء)
+    const observer = new MutationObserver(() => {
+      if (window.Telegram?.WebApp?.initData) {
+        setupTheme();
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document.documentElement, {
+      childList: false,
+      subtree: false,
+      attributes: true,
+    });
+  }
 };
 
-// 2. تهيئة التطبيق بعد تحميل DOM
+// تهيئة التطبيق بعد تحميل DOM
 document.addEventListener("DOMContentLoaded", () => {
   initTelegramTheme();
   
