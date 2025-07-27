@@ -16,6 +16,28 @@ import { z } from "zod";
 import { relations } from "drizzle-orm";
 
 // نظام الجلسات المعدل (بدون Replit)
+
+
+// باقي الجداول تبقى كما هي (بدون تغيير)
+export const categories = pgTable("categories", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: varchar("name", { length: 100 }).notNull(),
+  slug: varchar("slug", { length: 100 }).notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow(),
+// 🟢 1. عرف users أولاً
+export const users = pgTable("users", {
+  id: varchar("id").primaryKey(),
+  username: varchar("username"),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  photoUrl: varchar("photo_url"),
+  isPremium: boolean("is_premium"),
+  languageCode: varchar("language_code", { length: 10 }),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// 🟢 2. ثم sessions بعده
 export const sessions = pgTable(
   "sessions",
   {
@@ -29,27 +51,6 @@ export const sessions = pgTable(
     index("IDX_telegram_user_id").on(table.telegramUserId)
   ],
 );
-
-// جدول المستخدمين المعدل لدعم Telegram
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey(), // لن نستخدم UUID بل Telegram user_id
-  username: varchar("username"),
-  firstName: varchar("first_name"),
-  lastName: varchar("last_name"),
-  photoUrl: varchar("photo_url"),
-  isPremium: boolean("is_premium"),
-  languageCode: varchar("language_code", { length: 10 }),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// باقي الجداول تبقى كما هي (بدون تغيير)
-export const categories = pgTable("categories", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  name: varchar("name", { length: 100 }).notNull(),
-  slug: varchar("slug", { length: 100 }).notNull().unique(),
-  createdAt: timestamp("created_at").defaultNow(),
-});
 
 export const products = pgTable("products", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
