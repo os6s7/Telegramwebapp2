@@ -1,50 +1,70 @@
-import { createRoot } from "react-dom/client";
-import App from "./App";
-import "./index.css";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+import './index.css';
 
-// دالة لتهيئة سمة تيليجرام
+// 1. تعريف نوع TypeScript لـ Telegram WebApp
+declare global {
+  interface Window {
+    Telegram?: {
+      WebApp?: {
+        colorScheme: 'light' | 'dark';
+        initData?: string;
+        onEvent: (event: string, callback: () => void) => void;
+        offEvent: (event: string, callback: () => void) => void;
+      };
+    };
+  }
+}
+
+// 2. دالة لتهيئة السمة مع تحسينات الأداء
 const initTelegramTheme = () => {
-  if (typeof window === "undefined") return;
+  if (typeof window === 'undefined') return;
 
-  const setupTheme = () => {
-    const tg = window.Telegram?.WebApp;
-    if (!tg) return;
+  const tg = window.Telegram?.WebApp;
+  if (!tg) return;
 
-    // تطبيق السمة الحالية
-    document.documentElement.classList.toggle("dark", tg.colorScheme === "dark");
-
-    // الاستجابة لتغييرات السمة
-    tg.onEvent("themeChanged", () => {
-      document.documentElement.classList.toggle("dark", tg.colorScheme === "dark");
-    });
+  const applyTheme = () => {
+    document.documentElement.classList.toggle('dark', tg.colorScheme === 'dark');
   };
 
-  // إذا كان WebApp جاهزاً
-  if (window.Telegram?.WebApp?.initData) {
-    setupTheme();
-  } else {
-    // الانتظار حتى يصبح جاهزاً (لحالات التحميل البطيء)
-    const observer = new MutationObserver(() => {
-      if (window.Telegram?.WebApp?.initData) {
-        setupTheme();
-        observer.disconnect();
-      }
-    });
+  // تطبيق السمة فوراً
+  applyTheme();
 
-    observer.observe(document.documentElement, {
-      childList: false,
-      subtree: false,
-      attributes: true,
-    });
-  }
+  // إضافة Listener لتغييرات السمة
+  tg.onEvent('themeChanged', applyTheme);
+
+  // تنظيف عند التدمير
+  return () => {
+    tg.offEvent('themeChanged', applyTheme);
+  };
 };
 
-// تهيئة التطبيق بعد تحميل DOM
-document.addEventListener("DOMContentLoaded", () => {
-  initTelegramTheme();
+// 3. تهيئة التطبيق مع Strict Mode
+const initApp = () => {
+  const cleanupTheme = initTelegramTheme();
   
-  const rootElement = document.getElementById("root");
-  if (!rootElement) throw new Error("Root element not found");
+  const rootElement = document.getElementById('root');
+  if (!rootElement) throw new Error('Failed to find the root element');
+
+  const root = createRoot(rootElement);
   
-  createRoot(rootElement).render(<App />);
-});
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+
+  // تنظيف عند التدمير (لـ HMR في التطوير)
+  return () => {
+    cleanupTheme?.();
+    root.unmount();
+  };
+};
+
+// 4. تهيئة التطبيق مع حالات التحميل المختلفة
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
