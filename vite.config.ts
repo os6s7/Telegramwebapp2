@@ -37,8 +37,8 @@ export default defineConfig({
 
       output: {
         manualChunks: {
-          react: ['react', 'react-dom'],
-          vendor: ['@twa-dev/sdk']
+          react: ['react', 'react-dom']
+          // شلنا vendor: ['@twa-dev/sdk']
         },
         globals: {
           'react': 'React',
@@ -74,7 +74,7 @@ export default defineConfig({
     }
   },
 
-    esbuild: {
+  esbuild: {
     target: 'es2020'
   },
 
