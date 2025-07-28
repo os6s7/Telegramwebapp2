@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: telegram-webapp
+    env: static
+    buildCommand: npm run render-build
+    staticPublishPath: "./dist"
