@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "render-build": "npm ci --omit=dev && vite build",
+    "render-build": "npm install && npm run build",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --ext ts,tsx --fix",
     "clean": "rm -rf node_modules dist"
@@ -16,7 +16,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "@twa-dev/sdk": "^8.0.2",
-    "wouter": "^3.0.0"
+    "wouter": "^3.0.0",
+    "vite": "^4.5.14"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",
@@ -27,7 +28,6 @@
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
-    "vite": "^4.5.14",
     "eslint": "^8.56.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
@@ -37,17 +37,5 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
-  },
-  "browserslist": {
-    "production": [
-      "last 2 chrome versions",
-      "last 2 firefox versions",
-      "last 2 safari versions"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }
