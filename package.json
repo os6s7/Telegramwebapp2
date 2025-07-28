@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "render-build": "npm install && npm run build",
+    "render-build": "npm install --force && npm run build",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --ext ts,tsx --fix",
     "clean": "rm -rf node_modules dist"
@@ -18,16 +18,18 @@
     "@twa-dev/sdk": "^8.0.2",
     "wouter": "^3.0.0",
     "vite": "^4.5.14",
-    "@vitejs/plugin-react": "^4.2.1",  // نقلناه هنا
+    "@vitejs/plugin-react": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "@types/node": "^20.11.0",
     "autoprefixer": "^10.4.18",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "eslint": "^8.56.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "postcss-import": "^16.0.0",
-    "postcss-nested": "^6.0.1"
+    "eslint-plugin-react": "^7.33.2"
   },
   "engines": {
     "node": ">=18.0.0",
