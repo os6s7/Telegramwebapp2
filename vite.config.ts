@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { terser } from 'terser'; // استيراد terser مباشرة
 
 export default defineConfig({
   root: path.resolve(__dirname, './client'),
@@ -29,17 +28,7 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
     cssCodeSplit: false,
-    minify: 'terser', // تمكين minification مع terser
-    
-    terserOptions: { // إضافة خيارات terser
-      compress: {
-        drop_console: true, // إزالة console.log في الإنتاج
-        pure_funcs: ['console.info', 'console.debug'] // إزالة أنواع أخرى من console
-      },
-      format: {
-        comments: false // إزالة التعليقات
-      }
-    },
+    minify: 'esbuild', // ✅ استخدم esbuild بدل terser
 
     rollupOptions: {
       input: path.resolve(__dirname, 'client/index.html'),
