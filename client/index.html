@@ -1,26 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تطبيق تليجرام</title>
   
-  <!-- النمط المضمن كحل احتياطي -->
+  <!-- تحميل SDK Telegram WebApp -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  
+  <!-- النمط الاحتياطي -->
   <style>
     body, #root {
       margin: 0;
       padding: 0;
       min-height: 100vh;
       background: #f0f8ff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    /* تنسيق احتياطي في حال عدم تحميل CSS */
+    .fallback-message {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      color: red;
     }
   </style>
   
-  <!-- تعديل مسار CSS ليكون نسبياً من مجلد src -->
-  <link rel="stylesheet" href="./src/index.css">
+  <!-- تحميل ملف CSS الرئيسي -->
+  <link rel="stylesheet" href="./client/src/index.css">
 </head>
 <body>
-  <div id="root"></div>
+  <!-- العنصر الرئيسي لتطبيق React -->
+  <div id="root">
+    <div class="fallback-message">
+      جارِ تحميل التطبيق... إذا لم يتم التحميل، تأكد من:
+      <ul>
+        <li>وجود ملف client/src/index.css</li>
+        <li>وجود ملف client/src/main.tsx</li>
+        <li>عدم وجود أخطاء في Console (اضغط F12)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- تحميل تطبيق React الرئيسي -->
+  <script type="module" src="./client/src/main.tsx"></script>
   
-  <!-- تعديل مسار ملف الإدخال الرئيسي -->
-  <script type="module" src="./src/main.tsx"></script>
+  <!-- تهيئة Telegram WebApp -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const tg = window.Telegram.WebApp;
+      
+      // تهيئة الواجهة الأساسية
+      tg.expand();
+      tg.MainButton.setText("موافق").show();
+      tg.enableClosingConfirmation();
+      
+      // إظهار رسالة إذا فشل تحميل React
+      setTimeout(() => {
+        if (document.getElementById('root')?.children.length === 1) {
+          document.querySelector('.fallback-message').style.display = 'block';
+        }
+      }, 3000);
+    });
+  </script>
 </body>
 </html>
