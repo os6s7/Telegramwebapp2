@@ -2,14 +2,15 @@
   "name": "telegram-webapp",
   "version": "1.0.0",
   "type": "module",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "render-build": "npm install && vite build",
+    "render-build": "npm ci --omit=dev && vite build",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --ext ts,tsx --fix",
-    "postinstall": "npm install --only=dev"
+    "clean": "rm -rf node_modules dist"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -21,20 +22,17 @@
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "@types/node": "^20.11.0",
-    "@typescript-eslint/eslint-plugin": "^6.15.0",
-    "@typescript-eslint/parser": "^6.15.0",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.18",
-    "eslint": "^8.56.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
     "postcss": "^8.4.35",
-    "postcss-import": "^16.0.0",
-    "postcss-nested": "^6.0.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "vite": "^4.5.14",
-    "vite-plugin-checker": "^0.8.0"
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "postcss-import": "^16.0.0",
+    "postcss-nested": "^6.0.1"
   },
   "engines": {
     "node": ">=18.0.0",
