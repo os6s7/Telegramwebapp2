@@ -1,34 +1,26 @@
 {
-  "include": [
-    "client/src/**/*",
-    "shared/**/*",
-    "server/**/*",
-    "global.d.ts"  // أضف هذا السطر
-  ],
-  "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
   "compilerOptions": {
-    "incremental": true,
-    "tsBuildInfoFile": "./node_modules/typescript/tsbuildinfo",
-    "noEmit": true,
+    "target": "ESNext",
     "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "jsx": "react-jsx",
     "strict": true,
-    "lib": ["esnext", "dom", "dom.iterable"],
-    "jsx": "preserve",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "allowImportingTsExtensions": true,
-    "moduleResolution": "bundler",
-    "baseUrl": ".",
-    "types": [
-      "node",
-      "vite/client",
-      "@twa-dev/sdk/global"  // أضف هذا النوع
-    ],
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["./client/src/*"],
-      "@shared/*": ["./shared/*"],
-      "@assets/*": ["./attached_assets/*"],  // أضف لتتناسب مع vite.config
-      "telegram-web-app": ["node_modules/@twa-dev/sdk"]  // حل لاستيراد SDK
-    }
-  }
+      "@/*": ["client/src/*"],
+      "~/*": ["client/*"]
+    },
+    "types": ["tailwindcss"]
+  },
+  "include": [
+    "client/**/*",
+    "vite.config.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
