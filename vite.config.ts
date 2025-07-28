@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { terser } from 'terser'; // استيراد terser مباشرة
 
 export default defineConfig({
   root: path.resolve(__dirname, './client'),
@@ -8,10 +9,7 @@ export default defineConfig({
 
   plugins: [
     react({
-      jsxRuntime: 'automatic',
-      babel: {
-        plugins: []
-      }
+      jsxRuntime: 'automatic'
     })
   ],
 
@@ -31,8 +29,17 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
     cssCodeSplit: false,
-    assetsInlineLimit: 0,
-    minify: 'terser',
+    minify: 'terser', // تمكين minification مع terser
+    
+    terserOptions: { // إضافة خيارات terser
+      compress: {
+        drop_console: true, // إزالة console.log في الإنتاج
+        pure_funcs: ['console.info', 'console.debug'] // إزالة أنواع أخرى من console
+      },
+      format: {
+        comments: false // إزالة التعليقات
+      }
+    },
 
     rollupOptions: {
       input: path.resolve(__dirname, 'client/index.html'),
@@ -50,20 +57,6 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: parseInt(process.env.PORT || '3000'),
-    strictPort: true,
-    hmr: {
-      clientPort: 443,
-      protocol: 'wss'
-    },
-    fs: {
-      strict: false,
-      allow: ['..']
-    }
-  },
-
-  preview: {
-    host: '0.0.0.0',
-    port: parseInt(process.env.PORT || '3000'),
     strictPort: true
   },
 
@@ -79,14 +72,10 @@ export default defineConfig({
     include: [
       'react',
       'react-dom',
-      'react-dom/client',
       '@twa-dev/sdk'
     ],
     esbuildOptions: {
-      target: 'es2020',
-      supported: {
-        'top-level-await': true
-      }
+      target: 'es2020'
     }
   }
 });
